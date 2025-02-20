@@ -15,7 +15,7 @@ export const getPostBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
     const post = await client.fetch(
-      `*[_type == "post" && slug.current == $slug][0]{_id, title, slug, body, publishedAt, author->{name, image}}`,
+      `*[_type == "post" && slug.current == $slug][0]{_id, title, slug, content, publishedAt, mainImage}`,
       { slug }
     );
     if (!post) return res.status(404).json({ error: "Post not found" });
