@@ -3,7 +3,7 @@ import { client } from "../config/sanityClient.js";
 // Fetch all blog posts
 export const getAllPosts = async (req, res) => {
   try {
-    const posts = await client.fetch('*[_type == "post"]{_id, title, slug, mainImage, content, publishedAt, }');
+    const posts = await client.fetch('*[_type == "post"]{_id, title, slug,"imageUrl": mainImage.asset->url, content, publishedAt, }');
     res.json(posts);
   } catch (error) {
     res.status(500).json({ error: "Error fetching posts" });
@@ -15,7 +15,7 @@ export const getPostBySlug = async (req, res) => {
   try {
     const { slug } = req.params;
     const post = await client.fetch(
-      `*[_type == "post" && slug.current == $slug][0]{_id, title, slug, content, publishedAt, mainImage}`,
+      `*[_type == "post" && slug.current == $slug][0]{_id, title, slug, content, publishedAt, "imageUrl": mainImage.asset->url}`,
       { slug }
     );
     if (!post) return res.status(404).json({ error: "Post not found" });
